@@ -25,11 +25,17 @@ public class AppPulseOpenApiImp {
     private static HttpClient httpClient = HttpClientBuilder.create().setDefaultCookieStore(new BasicCookieStore()).build();;
 
     /**
-     *
+     * Before sending a REST request, you must first get a token.
+     * This method responsible for achieve it by sending URL:
+     * <SaaS domain>/mobile/openapi/rest/v1/<tenant ID>/oauth/token as POST
+     * with body: {"clientSecret": "<client secret>", "clientId": "<client ID>"}
+     * This generates a token with an expiration time-stamp. For example:
+     *   {"token":"123455_f48720f4-c64c-4aec-a697-7f73807601f8","expirationTime":1441202451284}
+     * The answer is parsing and returns the token as string
      * @param tenantId
      * @param clientId
      * @param clientSecret
-     * @return
+     * @return token as String.
      * @throws IOException
      */
     public static String getTokenFromAppPulseOpenAPI(String tenantId, String clientId, String clientSecret) throws IOException {
@@ -88,10 +94,16 @@ public class AppPulseOpenApiImp {
     }
 
     /**
-     *
+     * Get a list of applications for the tenant.
+     * For each application it returns the follow fields:
+     *   Application name
+     *   Application ID
+     *   Application package name
+     *   OS platform (iOS/Android)
+     *   other metrics for Application
      * @param token
      * @param tenantId
-     * @return
+     * @return List of ApplicationsDataBean
      * @throws IOException
      */
     public static List<String> getApplications(String token, String tenantId) throws IOException{
@@ -133,12 +145,22 @@ public class AppPulseOpenApiImp {
 
 
     /**
-     *
+     * Get an application’s Fundex score and breakdown scores.
+     * Using URL: <SaaS domain>/mobile/openapi/rest/v1/<tenant ID>/applications/
+     *            <app ID>/metrics/fundex/overview?from_day=<yyyy-mm-dd>&to_day=<yyyy-mmdd>
+     * Returns the following fields:
+     *   Fundex score
+     *   Slow UI points
+     *   Slow launch points
+     *   Crashes points
+     *   Errors points
+     *   Heavy battery usage points
+     *   Heavy cellular usage points
      * @param token
      * @param tenantId
      * @param actionId
-     * @param date
-     * @return
+     * @param date Get details on performance of different devices and OS versions.
+     * @return Fundex as FundexResponseBean
      * @throws IOException
      */
     public static FundexResponseBean.Data getFundex(String token, String tenantId, String actionId, String date) throws IOException{
@@ -180,12 +202,21 @@ public class AppPulseOpenApiImp {
     }
 
     /**
+     * Get details on performance of different devices and OS versions.
+     * the results will be arrange as matrix of devices and for each it will
+     * detail each of OS with its metrics that was in use.
+     * each device (parent) and its sons (OS) will contains the follow fields:
+     *   osName
+     *   osVersion
+     *   dailyAvgUsers
+     *   avgResponseTimeSec
      *
      * @param token
      * @param tenantId
      * @param actionId
-     * @param date
-     * @return
+     * @param date Get details on performance of different devices and OS versions.
+     * @return DeviceOsPerformanceMatrixBean ( matrix of device with details of all
+     *         its OSs including measurements)
      * @throws IOException
      */
     public static DeviceOsPerformanceMatrixBean.Data getDeviceOsPerformanceMatrix(String token, String tenantId, String actionId, String date) throws IOException{
