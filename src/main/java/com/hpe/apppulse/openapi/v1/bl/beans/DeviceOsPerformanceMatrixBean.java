@@ -73,6 +73,21 @@ public class DeviceOsPerformanceMatrixBean {
             return sb.toString();
         }
 
+        /**
+         * This is the bean that returns from Get details on performance of different devices.
+         * Returns the following:
+         *  Device model
+         *  Device vendor
+         *  Number of average daily users (per device type)
+         *
+         *  Average response time (per device type)
+         *         For each device type, returns the following:
+         *         OS name
+         *         OS version
+         *         Number of average daily users (per OS)
+         *         Average response time (per OS)
+         *
+         */
         public static final class DeviceList {
             public final String deviceModel;
             public final String deviceVendor;

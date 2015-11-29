@@ -2,6 +2,8 @@ package com.hpe.apppulse.openapi.v1.bl.beans;
 
 /**
  * Created by Meir Ron on 7/22/2015.
+ *
+ * This is the bean that contains the return Token details.
  */
 public class TokenBean {
     private Long expirationTime;

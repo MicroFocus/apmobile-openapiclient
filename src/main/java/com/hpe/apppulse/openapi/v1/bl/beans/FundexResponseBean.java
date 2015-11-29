@@ -74,6 +74,17 @@ public final class FundexResponseBean {
         }
     }
 
+    /**
+     * This is the bean that returns from: Get an application’s Fundex score and breakdown scores.
+     * Returns the following fields:
+     *  Fundex score
+     *  Slow UI points
+     *  Slow launch points
+     *  Crashes points
+     *  Errors points
+     *  Heavy battery usage points
+     *  Heavy cellular usage points
+     */
     public static final class Data {
         public long fundexScorePoints;
         public long slowUiPoints;

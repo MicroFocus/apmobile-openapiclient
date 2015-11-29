@@ -54,6 +54,17 @@ public class AppsResponseBean {
         }
     }
 
+    /**
+     * This is the bean that returns from getApplications:
+     * Application name
+     * Application ID
+     * Application package name
+     * OS platform (iOS/Android)
+     * Slow launch time threshold (sec)
+     * Slow action response time threshold (sec)
+     * Heavy battery usage threshold (percent per minute)
+     * Heave cellular data usage threshold (kilobyte per minute)
+     */
     public class ApplicationsDataBean {
         private List<ApplicationBean> applications;
 
