@@ -145,7 +145,7 @@ public class AppPulseOpenApiImp {
 
 
     /**
-     * Get an application’s Fundex score and breakdown scores.
+     * Get an application's Fundex score and breakdown scores.
      * Using URL: <SaaS domain>/mobile/openapi/rest/v1/<tenant ID>/applications/
      *            <app ID>/metrics/fundex/overview?from_day=<yyyy-mm-dd>&to_day=<yyyy-mmdd>
      * Returns the following fields:

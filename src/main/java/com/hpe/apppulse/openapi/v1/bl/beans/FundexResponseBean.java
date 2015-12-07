@@ -75,7 +75,7 @@ public final class FundexResponseBean {
     }
 
     /**
-     * This is the bean that returns from: Get an application’s Fundex score and breakdown scores.
+     * This is the bean that returns from: Get an application's Fundex score and breakdown scores.
      * Returns the following fields:
      *  Fundex score
      *  Slow UI points
