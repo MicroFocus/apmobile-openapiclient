@@ -12,9 +12,15 @@ any relevant information from it.
  3) Get fundex scores for all applications
  4) Get Matrix of device-OS performance for the second application.
 
+##Documentation
+-See source Javadoc for code documentation
+-More detailed docummentation is availble under the following link: [AppPulse Mobile Open API Guide](https://saas.hpe.com/sites/default/files/resources/files/AppPulse_Mobile_Open_API_Guide_1.pdf)
+
 ## Installation
 
-TODO: Describe the installation process
+-Clone the code
+-Compile
+-Use your "tenant id", "client id", "client secret" from AppPulse Settings section.
 
 ## Usage
 java OpenApiDemo <tenant id> <client id> <client secret> <from date>
@@ -32,13 +38,9 @@ You should input 4 parameters:
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## History
-
-TODO: Write history
-
 ## Credits
 Meir Ron
 
 ## License
 
-TODO: Write license
+Distrebuted under Apache License 2.0 see LICENSE file for more details.
