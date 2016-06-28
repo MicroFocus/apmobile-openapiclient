@@ -137,37 +137,42 @@ public class OpenApiDemo {
                 .withDescription("Print this message")
                 .hasArg()
                 .isRequired(false)
-                .create());
+                .create('h'));
 
         options.addOption(OptionBuilder.withLongOpt("tenantId")
+                .withValueSeparator()
                 .withDescription("Tenant Id")
                 .hasArg()
                 .isRequired(true)
-                .create('t'));
+                .create());
 
         options.addOption(OptionBuilder.withLongOpt("clientId")
+                .withValueSeparator()
                 .withDescription("Client Id")
                 .hasArg()
                 .isRequired(true)
-                .create('c'));
+                .create());
 
         options.addOption(OptionBuilder.withLongOpt("secret")
+                .withValueSeparator()
                 .withDescription("Client secrent")
                 .hasArg()
                 .isRequired(true)
-                .create('s'));
+                .create());
 
         options.addOption(OptionBuilder.withLongOpt("fromDate")
+                .withValueSeparator()
                 .withDescription("Date to calculate the data from (yyyy-mm-dd)")
                 .hasArg()
                 .isRequired(true)
-                .create('d'));
+                .create());
 
         options.addOption(OptionBuilder.withLongOpt("proxy")
+                .withValueSeparator()
                 .withDescription("proxy hostname and port (proxyhost:port)")
                 .hasArg()
                 .isRequired(false)
-                .create('p'));
+                .create());
 
         return options;
     }
