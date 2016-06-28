@@ -3,9 +3,13 @@ package com.hpe.apppulse.openapi;
 import com.hpe.apppulse.openapi.apppulseopenapi.AppPulseOpenApiImp;
 import com.hpe.apppulse.openapi.v1.bl.beans.DeviceOsPerformanceMatrixBean;
 import com.hpe.apppulse.openapi.v1.bl.beans.FundexResponseBean;
+import org.apache.commons.cli.*;
+import org.apache.http.impl.client.SystemDefaultCredentialsProvider;
 
 import java.io.IOException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +28,7 @@ import java.util.stream.Collectors;
  */
 public class OpenApiDemo {
 
-    final static String USAGE = "Parameters: <tenant id> <client id> <client secret> <from date>";
+    final static String USAGE = "Parameters: <tenant id> <client id> <client secret> <from date> <proxy>";
 
     public static void main(String[] args) {
         final String tenantId;
@@ -32,21 +36,33 @@ public class OpenApiDemo {
         final String clientSecret;
         final String fromDate;
 
-        // Input validation
-        if (args.length == 1) {
-            String command = args[0];
-            if (!command.equalsIgnoreCase("help")) {
-                System.err.println("Unknown command: " + command);
+        Options options = generateCommandLineOptions();
+
+        CommandLineParser parser = new BasicParser();
+
+        try {
+            CommandLine line = parser.parse(options, args);
+
+            if(line.hasOption("help")){
+                printUsage(options);
+                return;
             }
-            System.out.println(USAGE);
-            return;
-        } else if (args.length == 4) {
-            tenantId = args[0];
-            clientId = args[1];
-            clientSecret = args[2];
-            fromDate = args[3];
-        } else {
-            System.err.println(USAGE);
+
+            clientId = line.getOptionValue("clientId");
+            tenantId = line.getOptionValue("tenantId");
+            clientSecret = line.getOptionValue("secret");
+            fromDate = line.getOptionValue("fromDate");
+
+            if(line.hasOption("proxy")){
+                String proxyStr = line.getOptionValue("proxy");
+                AppPulseOpenApiImp.setProxy(proxyStr);
+            }
+
+
+
+        }catch (Exception ex){
+            System.err.println("Error parsing arguments!\n" + ex.getMessage());
+            printUsage(options);
             return;
         }
 
@@ -108,5 +124,51 @@ public class OpenApiDemo {
                 System.lineSeparator());
     }
 
+    private static void printUsage(Options options){
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp( "AppPulseOpenApi examples usage:", options );
+    }
 
+    private static Options generateCommandLineOptions(){
+
+        Options options =new Options();
+
+        options.addOption(OptionBuilder.withLongOpt("help")
+                .withDescription("Print this message")
+                .hasArg()
+                .isRequired(false)
+                .create());
+
+        options.addOption(OptionBuilder.withLongOpt("tenantId")
+                .withDescription("Tenant Id")
+                .hasArg()
+                .isRequired(true)
+                .create('t'));
+
+        options.addOption(OptionBuilder.withLongOpt("clientId")
+                .withDescription("Client Id")
+                .hasArg()
+                .isRequired(true)
+                .create('c'));
+
+        options.addOption(OptionBuilder.withLongOpt("secret")
+                .withDescription("Client secrent")
+                .hasArg()
+                .isRequired(true)
+                .create('s'));
+
+        options.addOption(OptionBuilder.withLongOpt("fromDate")
+                .withDescription("Date to calculate the data from (yyyy-mm-dd)")
+                .hasArg()
+                .isRequired(true)
+                .create('d'));
+
+        options.addOption(OptionBuilder.withLongOpt("proxy")
+                .withDescription("proxy hostname and port (proxyhost:port)")
+                .hasArg()
+                .isRequired(false)
+                .create('p'));
+
+        return options;
+    }
 }
