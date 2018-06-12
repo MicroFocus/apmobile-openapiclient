@@ -4,12 +4,9 @@ import com.hpe.apppulse.openapi.apppulseopenapi.AppPulseOpenApiImp;
 import com.hpe.apppulse.openapi.v1.bl.beans.DeviceOsPerformanceMatrixBean;
 import com.hpe.apppulse.openapi.v1.bl.beans.FundexResponseBean;
 import org.apache.commons.cli.*;
-import org.apache.http.impl.client.SystemDefaultCredentialsProvider;
 
 import java.io.IOException;
-import java.sql.SQLSyntaxErrorException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -66,7 +63,7 @@ public class OpenApiDemo {
             return;
         }
 
-        // 1. Authorise step
+        // 1. Authenticate step
         final String token;
         try {
             token = AppPulseOpenApiImp.getTokenFromAppPulseOpenAPI(tenantId, clientId, clientSecret);
@@ -101,7 +98,7 @@ public class OpenApiDemo {
                 System.out.printf("failed to get fundex of application:%s%s%s%n", application, System.lineSeparator(), e.getMessage());
                 return;
             }
-            System.out.printf("Fundex for application %s:%s%s", application, System.lineSeparator(), fundex.toString());
+            System.out.printf("Fundex for application %s:%s%s%s", application, System.lineSeparator(), fundex==null?"Not generated":fundex.toString(), System.lineSeparator());
         }
         printLine();
         // -----------------------------------------------------------------------------------
