@@ -2,7 +2,10 @@ package com.hpe.apppulse.openapi.apppulseopenapi;
 
 import com.hpe.apppulse.openapi.Utils.HttpUtils;
 import com.hpe.apppulse.openapi.Utils.JsonUtils;
-import com.hpe.apppulse.openapi.v1.bl.beans.*;
+import com.hpe.apppulse.openapi.v1.bl.beans.AppsResponseBean;
+import com.hpe.apppulse.openapi.v1.bl.beans.DeviceOsPerformanceMatrixBean;
+import com.hpe.apppulse.openapi.v1.bl.beans.FundexResponseBean;
+import com.hpe.apppulse.openapi.v1.bl.beans.TokenBean;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -11,20 +14,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.SystemDefaultCredentialsProvider;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.omg.CORBA.Environment;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -38,6 +36,7 @@ import java.util.stream.Collectors;
  */
 public class AppPulseOpenApiImp {
     private static RequestConfig proxyConfig;
+    private static HttpClient httpClient ;
 
     public AppPulseOpenApiImp(){
 
@@ -84,8 +83,6 @@ public class AppPulseOpenApiImp {
         System.out.println("Proxy port is defined to: " + proxyPort);
     }
 
-    private static HttpClient httpClient ;//= HttpClientBuilder.create().setDefaultCookieStore(new BasicCookieStore()).build();;
-
     /**
      * Before sending a REST request, you must first get a token.
      * This method responsible for achieve it by sending URL:
@@ -101,6 +98,26 @@ public class AppPulseOpenApiImp {
      * @throws IOException
      */
     public static String getTokenFromAppPulseOpenAPI(String tenantId, String clientId, String clientSecret) throws IOException {
+
+        final SSLConnectionSocketFactory sslsf;
+        try {
+            sslsf = new SSLConnectionSocketFactory(SSLContext.getDefault());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        final Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", new PlainConnectionSocketFactory())
+                .register("https", sslsf)
+                .build();
+
+        final PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registry);
+        cm.setMaxTotal(100);
+        httpClient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .setConnectionManager(cm)
+                .setDefaultCookieStore(new BasicCookieStore())
+                .build();
 
         System.out.println("Starting getTokenFromAppPulseOpenAPI ... ");
 
